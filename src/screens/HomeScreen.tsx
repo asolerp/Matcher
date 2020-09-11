@@ -1,17 +1,46 @@
 import React from 'react';
-import { View, Text } from "react-native"
-import { GET_ALL_MACHES } from '../operations/queries/getAllMatches'
+import { View, Text, Button, StyleSheet } from "react-native"
+import { GET_ME } from '../operations/queries/getAuthStatus'
 import { useQuery } from '@apollo/client';
+
+import { authMutations } from '../operations/mutations/index'
+import { Spinner } from 'native-base';
+
+
  
 export const HomeScreen = () => {
 
-  const { loading, data, error } = useQuery(GET_ALL_MACHES)
+  const { loading, data, error } = useQuery(GET_ME, {
+    fetchPolicy: 'cache-and-network'
+  })
 
-  console.log(loading, data, error)
+  const logOut = () => {
+    authMutations.signInUser(false)
+  }
 
   return (
-    <View>
-      <Text>Home</Text>
+    <View style={styles.container}>
+      {
+        data && (
+          <React.Fragment>
+            { loading && <Spinner/> }
+            <Text>Hola {data && data.me.email}</Text>
+            { data.me.matches.map((match)=> <Text key={match.id}>{match.name}</Text>)}
+          </React.Fragment>
+        )
+      }
+      <Button title={"Log Out"} onPress={() => logOut()} />
     </View>
   )
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+})

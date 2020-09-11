@@ -1,17 +1,31 @@
-import { useQuery } from '@apollo/client';
-import { useDispatch } from 'react-redux';
-import { graphqlPending, graphqlError } from '../state/match-list/actions'
 
-export const useGraphql = (graphQuery: any) => {
+import { useApolloClient } from '@apollo/client'
+import { SIGN_IN } from '../operations/queries/getAuthStatus'
+import { AsyncStorage } from 'react-native';
+import { authMutations } from '../operations/mutations/index'
 
-  const dispatch = useDispatch()
-  const { loading, error, data } = useQuery(graphQuery)
 
-  if (loading) dispatch(graphqlPending())
-  if (error) dispatch(graphqlError(error))
-  
+export class GraphAPI {
 
-  return { data }
+  client: any
+
+  constructor(client: any) {
+    this.client = client
+  }
+
+  signIn = async (email: string, password: string) => {
+    try {
+      const { data } = await this.client.query({
+        query: SIGN_IN,
+        variables: { email, password },
+        fetchPolicy: 'no-cache'
+      })
+      await AsyncStorage.setItem('token', data.loginUser)
+      authMutations.signInUser(true)
+    } catch (err) {
+      console.log(err.toString())
+    }
+ 
+  }
 
 }
-

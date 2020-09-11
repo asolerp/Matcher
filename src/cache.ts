@@ -3,6 +3,7 @@ import { InMemoryCache, makeVar, ReactiveVar } from "@apollo/client";
 
 export type Auth = {
   isLoggedIn: boolean
+  isPhoneVerified: boolean
 }
 
 export const cache: InMemoryCache = new InMemoryCache({
@@ -24,7 +25,8 @@ export const cache: InMemoryCache = new InMemoryCache({
  */
 
 const auth: Auth = {
-  isLoggedIn: false
+  isLoggedIn: false,
+  isPhoneVerified: false
 }
 
 export const authVar: ReactiveVar<Auth> = makeVar(

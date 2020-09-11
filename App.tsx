@@ -16,7 +16,9 @@ import { setContext } from '@apollo/client/link/context';
 // SCREENS
 
 import { HomeScreen } from './src/screens/HomeScreen'
-import { SignInScreen } from './src/screens/SignInScreen';
+import { SignInScreen } from './src/screens/Auth/SignInScreen';
+import { SignUpScreen } from './src/screens/Auth/SignUpScreen';
+import { PhoneVerification } from './src/screens/Auth/PhoneVerification';
 
 const httpLink = createHttpLink({
   uri: 'http://127.0.0.1:30001/',
@@ -51,45 +53,48 @@ export default function AppWrapper () {
 
 const Stack = createStackNavigator();
 
+const authScreens = {
+  SignUp: SignUpScreen,
+  SignIn: SignInScreen,
+}
+
+const homeScreens = {
+  Home: HomeScreen
+}
+
+const phoneScreens = {
+  Phone: PhoneVerification
+}
+
+const stackHandler = (auth) => {
+  if (auth.isLoggedIn) {
+    return auth.isPhoneVerified ? homeScreens : phoneScreens
+  }
+  return authScreens
+}
+
 
 const App = () => {
 
-
-  const GET_MATCHES = gql`
-  query GetMatches {
-    matches {
-      name
-    }
-  }
-`
-
-const { loading, data, error } = useQuery(GET_MATCHES)
-
-console.log(loading, data, error)
-
   // const { loading, data, error } = useQuery(GET_ALL_MACHES);
-  // const { data } = useQuery(GET_AUTH_STATUS)
-  // const auth = data.auth
+  const { data } = useQuery(GET_AUTH_STATUS)
+  const auth = data.auth
 
 
   // const matches = data && data.matches.map(m => ({ name: m.name}))
 
   return (
-    <View>
-      <Text>Hola</Text>
-    </View>
-    // <NavigationContainer>
-    //   <Stack.Navigator>
-    //     <Stack.Screen name="HomeScreen" component={HomeScreen}></Stack.Screen>
-    //     {/* {
-    //      auth.isLoggedIn 
-    //       ? <Stack.Screen name="HomeScreen" component={HomeScreen}></Stack.Screen>
-    //       : <Stack.Screen name="LoginScreen" component={SignInScreen}></Stack.Screen> 
-          
-    //     } */}
-        
-    //   </Stack.Navigator> 
-    // </NavigationContainer>
+    <NavigationContainer>
+      <Stack.Navigator>
+        {Object.entries({
+          // Use the screens normally
+          // Use some screens conditionally based on some condition
+          ...(stackHandler(auth)),
+        }).map(([name, component]) => (
+          <Stack.Screen key={`key-${name}`} name={name} component={component} />
+        ))}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
