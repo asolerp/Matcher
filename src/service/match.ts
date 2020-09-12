@@ -28,4 +28,13 @@ export class GraphAPI {
  
   }
 
+  signUp = async(data: any) => {
+    try {
+      await AsyncStorage.setItem('token', data.signUpUser)
+      authMutations.signInUser(true)
+    } catch (err) {
+      console.log(err.toString())
+    }
+  }
+
 }

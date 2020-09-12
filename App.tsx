@@ -19,6 +19,7 @@ import { HomeScreen } from './src/screens/HomeScreen'
 import { SignInScreen } from './src/screens/Auth/SignInScreen';
 import { SignUpScreen } from './src/screens/Auth/SignUpScreen';
 import { PhoneVerification } from './src/screens/Auth/PhoneVerification';
+import { CodeVerification } from './src/screens/Auth/CodeVerification';
 
 const httpLink = createHttpLink({
   uri: 'http://127.0.0.1:30001/',
@@ -54,16 +55,32 @@ export default function AppWrapper () {
 const Stack = createStackNavigator();
 
 const authScreens = {
-  SignUp: SignUpScreen,
-  SignIn: SignInScreen,
+  SignUp: {
+    component: SignUpScreen,
+    options: { headerShown: false}
+  },
+  SignIn: {
+    component: SignInScreen,
+    options: { headerShown: false}
+  },
 }
 
 const homeScreens = {
-  Home: HomeScreen
+  Home: {
+    component: HomeScreen
+  }
 }
 
 const phoneScreens = {
-  Phone: PhoneVerification
+  Code: {
+    component: CodeVerification,
+    options: { headerShown: false}
+  },
+  Phone: {
+    component: PhoneVerification,
+    options: { headerShown: false}
+  },
+
 }
 
 const stackHandler = (auth) => {
@@ -71,6 +88,7 @@ const stackHandler = (auth) => {
     return auth.isPhoneVerified ? homeScreens : phoneScreens
   }
   return authScreens
+  // return phoneScreens
 }
 
 
@@ -79,7 +97,6 @@ const App = () => {
   // const { loading, data, error } = useQuery(GET_ALL_MACHES);
   const { data } = useQuery(GET_AUTH_STATUS)
   const auth = data.auth
-
 
   // const matches = data && data.matches.map(m => ({ name: m.name}))
 
@@ -90,8 +107,8 @@ const App = () => {
           // Use the screens normally
           // Use some screens conditionally based on some condition
           ...(stackHandler(auth)),
-        }).map(([name, component]) => (
-          <Stack.Screen key={`key-${name}`} name={name} component={component} />
+        }).map(([name, {component, options}]) => (
+          <Stack.Screen key={`key-${name}`} name={name} options={{...options}} component={component} />
         ))}
       </Stack.Navigator>
     </NavigationContainer>

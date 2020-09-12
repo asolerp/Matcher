@@ -1,7 +1,10 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native'
 import { Spinner } from 'native-base'
 import { ButtonCustom } from '../../components/Button'
+
+import { authMutations } from '../../operations/mutations/index'
+import { GraphAPI } from '../../service/match'
 
 import { useApolloClient } from '@apollo/client'
 
@@ -12,6 +15,7 @@ import { signUp } from '../../operations/mutations/signUp'
 // COMPONENTS
 
 import { TextInputCustom } from '../../components/TextInput'
+
 
 
 export const SignUpScreen = ({ navigation }) => {
@@ -25,14 +29,18 @@ export const SignUpScreen = ({ navigation }) => {
   const [ loading, setLoading ] = React.useState(false)
 
   const client = useApolloClient()
+  const graphAPI = new GraphAPI(client)
 
 
   const handlerSignUp = async () => {
     setLoading(true)
     try {
-      await mutate({variables:{email, password}})
+      const mutation = await mutate({variables:{email, password}})
+      await graphAPI.signUp(mutation.data)
+      authMutations.signInUser(true)
       setLoading(false)
     } catch(err) {
+      setLoading(false)
       setError(err.toString())
     }
   }
@@ -51,9 +59,9 @@ export const SignUpScreen = ({ navigation }) => {
           ? <Spinner /> 
           : <ButtonCustom title={"Sign Up"} full danger rounded  onPress={() => handlerSignUp()}></ButtonCustom>
         }
-        <TouchableHighlight underlayColor="white" onPress={() => navigation.navigate('SignIn')}>
+        <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
           <Text>Login</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
         {
           error && <Text>{error}</Text>
         }
@@ -77,7 +85,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     marginLeft: 20,
-    marginTop: 20,
+    marginTop: 70,
   },
   inputContainer: {
     flex: 3,

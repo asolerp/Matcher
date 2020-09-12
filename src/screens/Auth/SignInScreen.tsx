@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, AsyncStorage } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Spinner } from 'native-base'
 import { ButtonCustom } from '../../components/Button'
 
@@ -11,7 +11,6 @@ import { useApolloClient } from '@apollo/client'
 // COMPONENTS
 
 import { TextInputCustom } from '../../components/TextInput'
-import { TouchableHighlight, TouchableWithoutFeedback, TouchableNativeFeedback } from 'react-native-gesture-handler'
 
 
 export const SignInScreen = ({ navigation }) => {
@@ -50,9 +49,9 @@ export const SignInScreen = ({ navigation }) => {
           ? <Spinner /> 
           : <ButtonCustom title={"Login"} full danger rounded  onPress={() => logearse()}></ButtonCustom>
         }
-        <TouchableHighlight underlayColor="white" onPress={() => navigation.navigate('SignUp')}>
+        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
           <Text>Sign Up</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
         {
           error && <Text>{error}</Text>
         }
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     marginLeft: 20,
-    marginTop: 20,
+    marginTop: 70,
   },
   inputContainer: {
     flex: 3,
