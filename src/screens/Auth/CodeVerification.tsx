@@ -86,17 +86,19 @@ export const CodeVerification = () => {
   const auth = data.auth
 
   const handleCodeInput = async () => {
-    // authMutations.updateLoading(true)
+    authMutations.updateLoading(true)
     try {
-      await mutate({variables:{code:value}})
-      // authMutations.updatePhoneVerification(true)
+      const mutation = await mutate({variables:{code:value}})
+      if (mutation) {
+        authMutations.updatePhoneVerification(true)
+      }
     } catch (err) {
       console.log(err)
     } 
-    // finally {
-    //   authMutations.updateLoading(false)
-    //   setCountSent(countSent + 1)
-    // }
+    finally {
+      authMutations.updateLoading(false)
+      setCountSent(countSent + 1)
+    }
   }
  
   return (
@@ -140,4 +142,3 @@ export const CodeVerification = () => {
     </View>
   );
 };
- 

@@ -20,8 +20,11 @@ export class GraphAPI {
         variables: { email, password },
         fetchPolicy: 'no-cache'
       })
-      await AsyncStorage.setItem('token', data.loginUser)
-      authMutations.signInUser(true)
+      console.log(data)
+      // await AsyncStorage.setItem('token', data.loginUser.token)
+      // authMutations.signInUser(true)
+      // authMutations.updateAuthToken(data.loginUser.phoneVerified)
+
     } catch (err) {
       console.log(err.toString())
     }

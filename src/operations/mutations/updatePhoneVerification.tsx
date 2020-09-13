@@ -3,6 +3,6 @@ import { Auth } from '../../cache'
 
 export default function updatePhoneVerification (authVar: ReactiveVar<Auth>) {
     return (status: boolean) => {
-      authVar({isPhoneVerified: status})
+      authVar({...authVar(), isPhoneVerified: status})
     }
 }
