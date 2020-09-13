@@ -72,12 +72,12 @@ const homeScreens = {
 }
 
 const phoneScreens = {
-  Code: {
-    component: CodeVerification,
-    options: { headerShown: false}
-  },
   Phone: {
     component: PhoneVerification,
+    options: { headerShown: false}
+  },
+  Code: {
+    component: CodeVerification,
     options: { headerShown: false}
   },
 

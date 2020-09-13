@@ -7,9 +7,8 @@ import { updatePhone } from '../../operations/mutations/updatePhone'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
-export const PhoneVerification = () => {
+export const PhoneVerification = ({navigation}) => {
 
-  const [countSent, setCountSent] = useState(0)
   const [phone, setPhone] = useState()
   const { mutate } = updatePhone();
   const [loading, setLoading] = useState(false)
@@ -18,12 +17,13 @@ export const PhoneVerification = () => {
     setLoading(true)
     try {
       const mutation = await mutate({variables:{ phone }})
-      console.log(mutation)
+      if (mutation) {
+        navigation.navigate('Code')
+      }
     } catch(err) {
       console.log(err)
     } finally {
       setLoading(false)
-      setCountSent(countSent + 1)
     }
   }
 
@@ -42,13 +42,6 @@ export const PhoneVerification = () => {
         title={'Enviar'}
         onPress={() => handlePhoneInput()}
         />
-      {
-        countSent > 0 && (
-          <TouchableOpacity onPress={() => handlePhoneInput()}>
-            <Text style={styles.sendAgain}>Volver a envair</Text>
-          </TouchableOpacity>
-        )
-      }
     </View>
     <View style={styles.titleContainer}></View>
   </View>
@@ -79,7 +72,4 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 70,
   },
-  sendAgain: {
-    color: '#9e9e9e'
-  }
 });

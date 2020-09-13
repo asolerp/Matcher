@@ -38,10 +38,10 @@ export const SignUpScreen = ({ navigation }) => {
       const mutation = await mutate({variables:{email, password}})
       await graphAPI.signUp(mutation.data)
       authMutations.signInUser(true)
-      setLoading(false)
     } catch(err) {
-      setLoading(false)
       setError(err.toString())
+    } finally {
+      setLoading(false)
     }
   }
 

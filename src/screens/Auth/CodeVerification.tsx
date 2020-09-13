@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
+import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
 import { ButtonCustom } from '../../components/Button';
 
 import { GET_AUTH_STATUS } from '../../operations/queries/getAuthStatus'
@@ -63,11 +63,16 @@ const styles = StyleSheet.create({
   focusCell: {
     borderColor: '#CC1D1D',
   },
+  sendAgain: {
+    color: '#9e9e9e'
+  }
 });
  
 const CELL_COUNT = 6;
  
 export const CodeVerification = () => {
+
+  const [countSent, setCountSent] = useState(0)
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -81,17 +86,17 @@ export const CodeVerification = () => {
   const auth = data.auth
 
   const handleCodeInput = async () => {
-    authMutations.updateLoading(true)
+    // authMutations.updateLoading(true)
     try {
-      const mutation = await mutate({variables:{code:value}})
-      if (mutation) {
-        authMutations.updatePhoneVerification(true)
-      }
+      await mutate({variables:{code:value}})
+      // authMutations.updatePhoneVerification(true)
     } catch (err) {
       console.log(err)
-    } finally {
-      authMutations.updateLoading(false)
-    }
+    } 
+    // finally {
+    //   authMutations.updateLoading(false)
+    //   setCountSent(countSent + 1)
+    // }
   }
  
   return (
@@ -123,6 +128,13 @@ export const CodeVerification = () => {
         title={'Enviar'}
         onPress={() => handleCodeInput()}
         />
+        {
+        countSent > 0 && (
+          <TouchableOpacity onPress={() => {}}>
+            <Text style={styles.sendAgain}>Volver a envair</Text>
+          </TouchableOpacity>
+        )
+      }
       </View>
       <View style={styles.titleContainer}></View>
     </View>
