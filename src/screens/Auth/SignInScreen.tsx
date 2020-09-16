@@ -7,6 +7,10 @@ import { ButtonCustom } from '../../components/Button'
 import { GraphAPI } from '../../service/match'
 
 import { useApolloClient } from '@apollo/client'
+import { authMutations } from '../../operations/mutations/index'
+
+import { clearAppData } from '../../service/asyncStorage'
+
 
 // COMPONENTS
 
@@ -29,6 +33,7 @@ export const SignInScreen = ({ navigation }) => {
     setLoading(true)
     try {
       await graphAPI.signIn(email, password)
+      authMutations.signInUser(true)
       setLoading(false)
     } catch(err) {
       setError(err.toString())
@@ -51,6 +56,9 @@ export const SignInScreen = ({ navigation }) => {
         }
         <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
           <Text>Sign Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => clearAppData()}>
+          <Text>Clear token</Text>
         </TouchableOpacity>
         {
           error && <Text>{error}</Text>
@@ -81,7 +89,8 @@ const styles = StyleSheet.create({
     flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 30
+    paddingHorizontal: 30,
+    width: "100%",
   },
   login: {
     color: 'black',

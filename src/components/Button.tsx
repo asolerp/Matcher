@@ -5,8 +5,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export const ButtonCustom = (props) => {
   return (
-    <TouchableOpacity onPress={props.onPress} style={{display: 'flex', flexDirection: 'row'}}>
-      <View style={styles.buttonWrapper}>
+    <TouchableOpacity onPress={props.onPress}>
+      <View style={[styles.buttonWrapper, ]}>
           {
             props.loading ? <ActivityIndicator size="small" color="white" /> : <Text style={styles.signUp}>{props.title}</Text>
           }
@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
-    marginVertical: 20,
+    flexDirection: "row",
+    height: 45,
     backgroundColor: '#CC1D1D',
     padding: 13,
     borderRadius: 5,

@@ -28,7 +28,12 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   titleContainer: {
+    flex: 1,
+  },
+  textWrapper: {
+    display: "flex",
     flexDirection: 'row',
+    flexWrap: 'wrap',
     width: '100%'
   },
   title: {
@@ -104,7 +109,9 @@ export const CodeVerification = () => {
   return (
     <View style={styles.root}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Verificación de teléfono</Text>
+        <View style={styles.textWrapper}>
+          <Text style={styles.title}>Verificación de teléfono</Text>
+        </View>
       </View>
       <View style={styles.codeContainer}>
         <CodeField

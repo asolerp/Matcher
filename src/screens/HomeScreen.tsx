@@ -7,30 +7,30 @@ import { authMutations } from '../operations/mutations/index'
 import { Spinner } from 'native-base';
 
 
+// NAVIGATION
+
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { HomeTab } from './Main/Home/HomeTab'
+
+const Tab = createBottomTabNavigator()
+
+
+const ProfileTab = () => {
+  return (
+    <View>
+      <Text>Hola profile!</Text>
+    </View>
+  )
+}
  
 export const HomeScreen = () => {
 
-  const { loading, data, error } = useQuery(GET_ME, {
-    fetchPolicy: 'cache-and-network'
-  })
-
-  const logOut = () => {
-    authMutations.signInUser(false)
-  }
 
   return (
-    <View style={styles.container}>
-      {
-        data && (
-          <React.Fragment>
-            { loading && <Spinner/> }
-            <Text>Hola {data && data.me.email}</Text>
-            { data.me.matches.map((match)=> <Text key={match.id}>{match.name}</Text>)}
-          </React.Fragment>
-        )
-      }
-      <Button title={"Log Out"} onPress={() => logOut()} />
-    </View>
+    <Tab.Navigator>
+      <Tab.Screen name="HomeTab" component={HomeTab} />
+      <Tab.Screen name="ProfileTab" component={ProfileTab} />
+    </Tab.Navigator>
   )
 }
 

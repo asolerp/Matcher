@@ -4,7 +4,11 @@ export const SIGN_IN = gql`
   query SigIn($email: String!, $password: String!) {
     loginUser(email: $email, password: $password) {
       token
-      phoneVerified
+      user {
+        phone {
+          verified
+        }
+      }
     }
   }
 `
@@ -12,6 +16,19 @@ export const SIGN_IN = gql`
 export const GET_AUTH_STATUS = gql`
   query GetAuthStatus {
     auth @client 
+  }
+`
+
+export const GET_ME_PROFILE = gql`
+  query GetMeProfile {
+    me {
+      name
+      email
+      age
+      height
+      nationality
+      position      
+    }
   }
 `
 

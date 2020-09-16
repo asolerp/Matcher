@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { StyleSheet, AsyncStorage, View, Text } from 'react-native';
+import { StyleSheet, AsyncStorage, View, Text, Platform } from 'react-native';
 
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -15,14 +15,14 @@ import { setContext } from '@apollo/client/link/context';
 
 // SCREENS
 
-import { HomeScreen } from './src/screens/HomeScreen'
 import { SignInScreen } from './src/screens/Auth/SignInScreen';
 import { SignUpScreen } from './src/screens/Auth/SignUpScreen';
 import { PhoneVerification } from './src/screens/Auth/PhoneVerification';
 import { CodeVerification } from './src/screens/Auth/CodeVerification';
+import { MainScreen } from './src/screens/Main/Main';
 
 const httpLink = createHttpLink({
-  uri: 'http://127.0.0.1:30001/',
+  uri: Platform.OS === 'ios' ? 'http://127.0.0.1:30001/' : 'http://10.0.2.2:30001/',
 });
 
 const authLink = setContext(async (_, { headers }) => {
@@ -67,7 +67,7 @@ const authScreens = {
 
 const homeScreens = {
   Home: {
-    component: HomeScreen
+    component: MainScreen
   }
 }
 
@@ -88,7 +88,7 @@ const stackHandler = (auth) => {
     return auth.isPhoneVerified ? homeScreens : phoneScreens
   }
   return authScreens
-  // return phoneScreens
+  // return homeScreens
 }
 
 

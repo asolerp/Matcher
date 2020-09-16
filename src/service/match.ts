@@ -20,10 +20,12 @@ export class GraphAPI {
         variables: { email, password },
         fetchPolicy: 'no-cache'
       })
-      console.log(data)
-      // await AsyncStorage.setItem('token', data.loginUser.token)
-      // authMutations.signInUser(true)
-      // authMutations.updateAuthToken(data.loginUser.phoneVerified)
+
+      const { loginUser: { token, user: { phone: { verified } } } } = data
+
+      await AsyncStorage.setItem('token', token)
+      await authMutations.signInUserAndCheckPhone(true, verified)
+      // await authMutations.updateAuthToken(verified)
 
     } catch (err) {
       console.log(err.toString())
@@ -32,12 +34,12 @@ export class GraphAPI {
   }
 
   signUp = async(data: any) => {
-    try {
-      await AsyncStorage.setItem('token', data.signUpUser)
-      authMutations.signInUser(true)
-    } catch (err) {
-      console.log(err.toString())
-    }
+      try {
+        await AsyncStorage.setItem('token', data.signUpUser.token)
+        authMutations.signInUser(true)
+      } catch (err) {
+        console.log(err.toString())
+      }
   }
 
 }

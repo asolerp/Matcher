@@ -3,6 +3,6 @@ import { Auth } from '../../cache'
 
 export default function updateAuthToken (authVar: ReactiveVar<Auth>) {
     return (token: string) => {
-      authVar({authToken: token})
+      authVar({...authVar(), authToken: token})
     }
 }
